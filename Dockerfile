@@ -1,6 +1,5 @@
-FROM python:3.7.4-stretch
+FROM python:3.8
 
-WORKDIR /usr/src/app
 COPY . ./
 
 # System Prerequistes
@@ -15,5 +14,9 @@ RUN apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Dependency Environment
-RUN pip install pipenv
-RUN pipenv install --system --deploy
+RUN pip install poetry
+# Project initialization:
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
+
+CMD ["python", "main.py"]
